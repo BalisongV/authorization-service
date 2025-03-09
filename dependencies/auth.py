@@ -11,3 +11,7 @@ def authenticate_user(x_username: str = Header(...), x_user_hashed_password: str
             headers={"WWW-Authenticate": "Custom"},
         )
     return user
+
+def check_allow_edit(x_allow_edit: str = Header(...)):
+    if x_allow_edit != "True":
+        raise HTTPException(status_code=403, detail="Editing not allowed")
