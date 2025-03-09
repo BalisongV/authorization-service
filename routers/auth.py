@@ -1,12 +1,17 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Header
 from models.user import User
 from dependencies.auth import authenticate_user, check_allow_edit
 
 router = APIRouter()
 
 @router.post("/signin")
-def signin(response: Response, user: User = Depends(authenticate_user)):
+def signin(response: Response, x_username: str = Header(...), x_user_hashed_password: str = Header(...)):
+    user = authenticate_user(x_username, x_user_hashed_password)
+
+    response.headers["X-Username"] = x_username
+    response.headers["X-User-Hashed-Password"] = x_user_hashed_password
     response.headers["X-Allow-Edit"] = "True"
+    
     return user
 
 @router.get("/me")
