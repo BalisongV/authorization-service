@@ -1,6 +1,9 @@
 from fastapi import APIRouter, Depends, Response, Header
+from fastapi.responses import RedirectResponse
+import webbrowser
+
 from models.user import User
-from dependencies.auth import authenticate_user, check_allow_edit
+from dependencies.auth_depends import authenticate_user, check_allow_edit
 
 router = APIRouter()
 
@@ -11,8 +14,8 @@ def signin(response: Response, x_username: str = Header(...), x_user_hashed_pass
     response.headers["X-Username"] = x_username
     response.headers["X-User-Hashed-Password"] = x_user_hashed_password
     response.headers["X-Allow-Edit"] = "True"
-    
-    return user
+    webbrowser.open_new_tab('http://localhost:8000/docs#/')
+    return RedirectResponse(url='http://localhost:8000/docs#/', status_code=302)
 
 @router.get("/me")
 def read_current_user(user: User = Depends(authenticate_user), allow_edit: bool = Depends(check_allow_edit)):
