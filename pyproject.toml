@@ -3,7 +3,7 @@ name = "auth-serv"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "BalisongV",email = ""}
+    {name = "BalisongV",email = "fake@mail.ru"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"

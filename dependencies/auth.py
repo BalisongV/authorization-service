@@ -1,16 +1,22 @@
 from fastapi import HTTPException, Header
 from services.user_service import get_user
 from models.user import User
+from database.fake_db import fake_users_db
 
-def authenticate_user(x_username: str = Header(...), x_user_hashed_password: str = Header(...)) -> User:
-    user = get_user(x_username, x_user_hashed_password)
+def authenticate_user(username: str, password: str) -> User:
+    user = get_user(username, password)
     if not user:
         raise HTTPException(
             status_code=401,
             detail="Invalid username or password",
             headers={"WWW-Authenticate": "Custom"},
         )
-    return user
+
+    user_dict = user.dict()
+    
+    user_dict["x-username"] = username
+    user_dict["x-user-hashed-password"] = fake_users_db[username]["hashed_password"]
+    return user_dict
 
 def check_allow_edit(x_allow_edit: str = Header(...)):
     if x_allow_edit != "True":
