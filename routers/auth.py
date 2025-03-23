@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, Response, Header
+from fastapi import APIRouter, Depends
 from models.user import User
 from dependencies.auth import authenticate_user
-import json
 from pydantic import BaseModel
 
 router = APIRouter()
